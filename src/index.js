@@ -7,12 +7,18 @@ let tileSelect; //declared here to grant access to update method
 
 let graphics; // used in create to view path - remove when done
 let path; // used in create to make path
-//code to create squirrel and badGuy instances
+
+//vars to create squirrel and badGuy instances and groups
 let addSquirrel;
 let addBadGuy;
+let enemyGroup;
 
-class MyGame extends Phaser.Scene
-{
+let count = 1;
+let thisTimer = 4000;
+
+const addBadGuyTimer = Phaser.Time.TimerEvent; //timer to create bad guy in group
+
+class MyGame extends Phaser.Scene{
   constructor ()
   {
     super();
@@ -82,12 +88,14 @@ class MyGame extends Phaser.Scene
 
     addBadGuy = (path, x, y) => {
       this.add.badGuy(path, x, y);
-
     }
+
+    // group creation
+    enemyGroup = this.add.group();
   }
 
-  update () {
-    var worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
+  update (time, delta) {
+    const worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
 
     // Rounds down to nearest tile
     let pointerTileX = map.worldToTileX(worldPoint.x);
@@ -103,7 +111,12 @@ class MyGame extends Phaser.Scene
       console.log(this.children);
     }
 
-    addBadGuy(path, 210, 30);
+    if (thisTimer * count < time) {
+      addBadGuy(path, 210, -30);
+      count++;
+    }
+
+    //addBadGuy(path, 210, 30);
 
     // badGuy.startFollow({
     //   duration: 5000,
