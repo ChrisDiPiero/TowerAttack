@@ -1,11 +1,15 @@
 import Phaser from 'phaser';
+import Squirrel from './Squirrels'
+import BadGuy from './BadGuy'
 
 let map; //declared here to grant access to update method
 let tileSelect; //declared here to grant access to update method
 
-let graphics; // used in create to make path - remove when done
+let graphics; // used in create to view path - remove when done
 let path; // used in create to make path
-let selectShooter = 'squirrel';
+//code to create squirrel and badGuy instances
+let addSquirrel;
+let addBadGuy;
 
 class MyGame extends Phaser.Scene
 {
@@ -17,12 +21,11 @@ class MyGame extends Phaser.Scene
   preload ()
   {
     this.load.image('tiles', 'src/assets/tiles.png');
-    this.load.image('enemy', 'src/assets/badguy.svg');
+    this.load.image('badGuy', 'src/assets/badguy.svg');
     this.load.image('squirrel', 'src/assets/goodguys.svg');
   }
     
-  create ()
-  {
+  create () {
     //main grid
     const board = [
       [7, 8, 9, 0, 10, 8, 7, 8, 8, 9, 7, 7, 8, 9, 6],
@@ -35,7 +38,7 @@ class MyGame extends Phaser.Scene
       [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 7, 7],
       [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 7, 7],
       [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 7, 7]
-    ]
+    ];
 
     // populate the tiles
     map = this.make.tilemap({ data: board,  tileWidth: 60, tileHeight: 60 });
@@ -59,55 +62,54 @@ class MyGame extends Phaser.Scene
     path.draw(graphics);
 
     //add enemy line follower
-    let badguy = this.add.follower(path, 210, -30, 'enemy');
+    // let badGuy = this.add.follower(path, 210, -30, 'enemy');
 
-    badguy.startFollow({
-      duration: 5000,
-      rotateToPath: true,
-      verticalAdjust: true
-    })
+    // badGuy.startFollow({
+    //   duration: 5000,
+    //   rotateToPath: true,
+    //   verticalAdjust: true
+    // })
 
-    //add code to highlight selected tile
+    //add code to highlight selected tile for tower placement
     tileSelect = this.add.graphics();
     tileSelect.lineStyle(2, 0x000000, 1);
     tileSelect.strokeRect(0, 0, map.tileWidth * layer.scaleX, map.tileHeight * layer.scaleY);
+
+    // create functions initialized here to bind 'this'
+    addSquirrel = (x, y) => {
+      this.add.squirrel(x, y)
+    }
+
+    addBadGuy = (path, x, y) => {
+      this.add.badGuy(path, x, y);
+
+    }
   }
 
-  update ()
-  {
+  update () {
     var worldPoint = this.input.activePointer.positionToCamera(this.cameras.main);
 
     // Rounds down to nearest tile
-    var pointerTileX = map.worldToTileX(worldPoint.x);
-    var pointerTileY = map.worldToTileY(worldPoint.y);
+    let pointerTileX = map.worldToTileX(worldPoint.x);
+    let pointerTileY = map.worldToTileY(worldPoint.y);
 
     // Snap to tile coordinates, but in world space
     tileSelect.x = map.tileToWorldX(pointerTileX);
     tileSelect.y = map.tileToWorldY(pointerTileY);
 
-    if (this.input.manager.activePointer.isDown)
-    {
-      map.putTileAt(0, pointerTileX, pointerTileY);
-    //   switch (objectToPlace) {
-    //     case 'flower':
-    //       // You can place an individal tile by index (or by passing in a Tile object)
-    //       map.putTileAt(15, pointerTileX, pointerTileY);
-    //       break;
-    //     case 'platform':
-    //       // You can place a row of tile indexes at a location
-    //       map.putTilesAt([ 104, 105, 106, 107 ], pointerTileX, pointerTileY);
-    //       break;
-    //     case 'tiki':
-    //       // You can also place a 2D array of tiles at a location
-    //       map.putTilesAt([
-    //         [ 49, 50 ],
-    //         [ 51, 52 ]
-    //       ], pointerTileX, pointerTileY);
-    //       break;
-    //     default:
-    //         break;
-      // }
+    if (this.input.manager.activePointer.isDown) {
+      addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
+      console.clear();
+      console.log(this.children);
     }
+
+    addBadGuy(path, 210, 30);
+
+    // badGuy.startFollow({
+    //   duration: 5000,
+    //   rotateToPath: true,
+    //   verticalAdjust: true      
+    // })
   }
 }
 
