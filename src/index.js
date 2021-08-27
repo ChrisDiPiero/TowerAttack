@@ -86,14 +86,17 @@ class MyGame extends Phaser.Scene{
 
     badGuyGroup = this.add.group();
 
-    // const isSquirrelHere = (x, y) => {
-    //   squirrelGroup.find( (i) => i.x === x && i.y === y)
-    // }
-    const isSquirrelHere = () => {
-      if(true) {
-        console.log(squirrelGroup.children)
-      }
+    const isSquirrelHere = (x, y) => {
+      console.log(x, y);
+      const squirrelArray = squirrelGroup.children.entries;
+      if(squirrelArray.length) {console.log(squirrelArray[0].x)}
+      //console.log(.find( (i) => i.x === x && i.y === y));
     }
+    // const isSquirrelHere = () => {
+    //   if(true) {
+    //     console.log(squirrelGroup.children.entries)
+    //   }
+    // }
 
     // test to see if squirrel allowed on tile
     this.input.on('pointerdown', function (pointer) {
