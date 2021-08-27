@@ -14,7 +14,7 @@ let addBadGuy;
 let enemyGroup;
 
 let count = 1;
-let thisTimer = 4000;
+let squirrelAllowed = false;
 
 const addBadGuyTimer = Phaser.Time.TimerEvent; //timer to create bad guy in group
 
@@ -63,18 +63,9 @@ class MyGame extends Phaser.Scene{
     path.lineTo(750, 150);
     path.lineTo(750, 630);
     
-    graphics.lineStyle(3, 0xffffff, 1);
     // visualize the path
+    graphics.lineStyle(3, 0xffffff, 1);
     path.draw(graphics);
-
-    //add enemy line follower
-    // let badGuy = this.add.follower(path, 210, -30, 'enemy');
-
-    // badGuy.startFollow({
-    //   duration: 5000,
-    //   rotateToPath: true,
-    //   verticalAdjust: true
-    // })
 
     //add code to highlight selected tile for tower placement
     tileSelect = this.add.graphics();
@@ -86,15 +77,24 @@ class MyGame extends Phaser.Scene{
       this.add.squirrel(x, y)
     }
 
-    let runLog = () => this.children.list;
+    let enemyGroup = () => this.children.list;
 
     addBadGuy = (path, x, y, name) => {
       this.add.badGuy(path, x, y, name);
-      console.log(runLog());
     }
 
+    // test to see if squirrel allowed on tile
+    this.input.on('pointerdown', function (pointer) {
+      let clickedTileIndex = map.getTileAtWorldXY(pointer.worldX, pointer.worldY).index;
+      if (clickedTileIndex > 6) {
+        addSquirrel(tileSelect.x + 30, tileSelect.y + 30);
+      }
+    });
+
+    this.input
+
     // group creation
-    enemyGroup = this.add.group();
+    // enemyGroup = this.add.group();
   }
 
   update (time, delta) {
@@ -103,27 +103,19 @@ class MyGame extends Phaser.Scene{
     // Rounds down to nearest tile
     let pointerTileX = map.worldToTileX(worldPoint.x);
     let pointerTileY = map.worldToTileY(worldPoint.y);
-
+    
     // Snap to tile coordinates, but in world space
     tileSelect.x = map.tileToWorldX(pointerTileX);
     tileSelect.y = map.tileToWorldY(pointerTileY);
 
-    if (this.input.manager.activePointer.isDown) {
-      addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
-    }
 
-    if (thisTimer * count < time) {
-      addBadGuy(path, 210, -30, count);
-      count++;
-    }
+          // //addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
+          // console.log(clickedTileIndex);
 
-    //addBadGuy(path, 210, 30);
-
-    // badGuy.startFollow({
-    //   duration: 5000,
-    //   rotateToPath: true,
-    //   verticalAdjust: true      
-    // })
+    // if (thisTimer * count < time) {
+    //   addBadGuy(path, 210, -30, count);
+    //   count++;
+    // }
   }
 }
 

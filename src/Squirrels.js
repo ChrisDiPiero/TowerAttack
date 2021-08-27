@@ -13,6 +13,8 @@ export default class Squirrel extends Phaser.GameObjects.Sprite {
 Phaser.GameObjects.GameObjectFactory.register('squirrel', function (x, y) {
   const squirrel = new Squirrel(this.scene, x, y);
 
+  console.log(squirrel);
+
   this.displayList.add(squirrel);
   this.updateList.add(squirrel);
   }
