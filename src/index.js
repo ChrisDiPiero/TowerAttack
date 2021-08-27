@@ -86,8 +86,11 @@ class MyGame extends Phaser.Scene{
       this.add.squirrel(x, y)
     }
 
-    addBadGuy = (path, x, y) => {
-      this.add.badGuy(path, x, y);
+    let runLog = () => this.children.list;
+
+    addBadGuy = (path, x, y, name) => {
+      this.add.badGuy(path, x, y, name);
+      console.log(runLog());
     }
 
     // group creation
@@ -107,12 +110,10 @@ class MyGame extends Phaser.Scene{
 
     if (this.input.manager.activePointer.isDown) {
       addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
-      console.clear();
-      console.log(this.children);
     }
 
     if (thisTimer * count < time) {
-      addBadGuy(path, 210, -30);
+      addBadGuy(path, 210, -30, count);
       count++;
     }
 

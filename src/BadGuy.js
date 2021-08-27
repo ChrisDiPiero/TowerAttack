@@ -1,18 +1,16 @@
 import Phaser from 'phaser';
-import HealthBar from './HealthBar.js'
 
 export default class BadGuy extends Phaser.GameObjects.PathFollower {
-  constructor(scene, path, x, y) {
+  constructor(scene, path, x, y, name) {
     super(scene, path, x, y, 'badGuy');
-
-
+    this.alive = true;
+    this.hp = 100;
+    this.name = name;
   }
-
-
 }
 
-Phaser.GameObjects.GameObjectFactory.register('badGuy', function (path, x, y) {
-  const badGuy = new BadGuy(this.scene, path, x, y);
+Phaser.GameObjects.GameObjectFactory.register('badGuy', function (path, x, y, name) {
+  const badGuy = new BadGuy(this.scene, path, x, y, name);
 
   badGuy.startFollow({
   duration: 10000,
