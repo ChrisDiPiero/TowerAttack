@@ -12,6 +12,8 @@ export default class BadGuy extends Phaser.GameObjects.PathFollower {
 Phaser.GameObjects.GameObjectFactory.register('badGuy', function (path, x, y, name) {
   const badGuy = new BadGuy(this.scene, path, x, y, name);
 
+  badGuyGroup.add(badGuy);
+
   badGuy.startFollow({
   duration: 10000,
   rotateToPath: true,

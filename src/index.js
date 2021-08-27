@@ -11,7 +11,8 @@ let path; // used in create to make path
 //vars to create squirrel and badGuy instances and groups
 let addSquirrel;
 let addBadGuy;
-let enemyGroup;
+let badGuyGroup;
+let squirrelGroup;
 
 let count = 1;
 let squirrelAllowed = false;
@@ -73,28 +74,36 @@ class MyGame extends Phaser.Scene{
     tileSelect.strokeRect(0, 0, map.tileWidth * layer.scaleX, map.tileHeight * layer.scaleY);
 
     // create functions initialized here to bind 'this'
-    addSquirrel = (x, y) => {
-      this.add.squirrel(x, y)
+    addSquirrel = (x, y, group) => {
+      this.add.squirrel(x, y, group)
     }
 
-    let enemyGroup = () => this.children.list;
+    squirrelGroup = this.add.group();
 
     addBadGuy = (path, x, y, name) => {
       this.add.badGuy(path, x, y, name);
     }
 
+    badGuyGroup = this.add.group();
+
+    // const isSquirrelHere = (x, y) => {
+    //   squirrelGroup.find( (i) => i.x === x && i.y === y)
+    // }
+    const isSquirrelHere = () => {
+      if(true) {
+        console.log(squirrelGroup.children)
+      }
+    }
+
     // test to see if squirrel allowed on tile
     this.input.on('pointerdown', function (pointer) {
       let clickedTileIndex = map.getTileAtWorldXY(pointer.worldX, pointer.worldY).index;
-      if (clickedTileIndex > 6) {
-        addSquirrel(tileSelect.x + 30, tileSelect.y + 30);
+      if (clickedTileIndex > 6 && !isSquirrelHere(tileSelect.x + 30, tileSelect.y + 30)) {
+        addSquirrel(tileSelect.x + 30, tileSelect.y + 30, squirrelGroup);
+      } else {
+        console.log("no squirrel for you!")
       }
     });
-
-    this.input
-
-    // group creation
-    // enemyGroup = this.add.group();
   }
 
   update (time, delta) {
