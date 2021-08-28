@@ -12,10 +12,11 @@ let path; // used in create to make path
 let addSquirrel;
 let addBadGuy;
 let badGuyGroup;
+let badGuyArray = [];
 let squirrelGroup;
+let squirrelArray = [];
 
 let count = 1;
-let squirrelAllowed = false;
 
 const addBadGuyTimer = Phaser.Time.TimerEvent; //timer to create bad guy in group
 
@@ -87,11 +88,10 @@ class MyGame extends Phaser.Scene{
     badGuyGroup = this.add.group();
 
     const isSquirrelHere = (x, y) => {
-      const squirrelArray = squirrelGroup.children.entries;
+      squirrelArray = squirrelGroup.children.entries;
       if(squirrelArray.length) {
         return squirrelArray.find( (i) => i.x === x && i.y === y)
       }
-      //console.log(.find( (i) => i.x === x && i.y === y));
     }
 
 
@@ -117,14 +117,17 @@ class MyGame extends Phaser.Scene{
     tileSelect.x = map.tileToWorldX(pointerTileX);
     tileSelect.y = map.tileToWorldY(pointerTileY);
 
+    if (2000 * count < time && squirrelArray.length) {
+      Phaser.Actions.Call(closest, badGuyArray);
+  
+    }
 
-          // //addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
-          // console.log(clickedTileIndex);
-
-    // if (2000 * count < time) {
-    //   addBadGuy(path, 210, -30, count, badGuyGroup);
-    //   count++;
-    // }
+    if (2000 * count < time) {
+      addBadGuy(path, 210, -30, count, badGuyGroup);
+      badGuyArray = badGuyGroup.children.entries;
+      console.log(badGuyArray);
+      count++;
+    }
   }
 }
 
