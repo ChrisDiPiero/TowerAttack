@@ -80,23 +80,20 @@ class MyGame extends Phaser.Scene{
 
     squirrelGroup = this.add.group();
 
-    addBadGuy = (path, x, y, name) => {
-      this.add.badGuy(path, x, y, name);
+    addBadGuy = (path, x, y, name, group) => {
+      this.add.badGuy(path, x, y, name, group);
     }
 
     badGuyGroup = this.add.group();
 
     const isSquirrelHere = (x, y) => {
-      console.log(x, y);
       const squirrelArray = squirrelGroup.children.entries;
-      if(squirrelArray.length) {console.log(squirrelArray[0].x)}
+      if(squirrelArray.length) {
+        return squirrelArray.find( (i) => i.x === x && i.y === y)
+      }
       //console.log(.find( (i) => i.x === x && i.y === y));
     }
-    // const isSquirrelHere = () => {
-    //   if(true) {
-    //     console.log(squirrelGroup.children.entries)
-    //   }
-    // }
+
 
     // test to see if squirrel allowed on tile
     this.input.on('pointerdown', function (pointer) {
@@ -124,8 +121,8 @@ class MyGame extends Phaser.Scene{
           // //addSquirrel(pointerTileX * 60 + 30, pointerTileY * 60 + 30);
           // console.log(clickedTileIndex);
 
-    // if (thisTimer * count < time) {
-    //   addBadGuy(path, 210, -30, count);
+    // if (2000 * count < time) {
+    //   addBadGuy(path, 210, -30, count, badGuyGroup);
     //   count++;
     // }
   }
