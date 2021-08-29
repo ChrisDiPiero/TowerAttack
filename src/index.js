@@ -110,8 +110,12 @@ class MyGame extends Phaser.Scene{
     });
 
     // set target for each squirrel
-    getTarget = function(array, enemy) {
-      array.Map(e => e.setTarget(enemy))
+    getTarget = function (x, y, distance) {
+      for(let i = 0; i < badGuyArray.length; i++) {       
+          if(badGuyArray[i].alive && Phaser.Math.Distance.Between(x, y, badGuyArray[i].x, badGuyArray[i].y) <= distance)
+              return badGuyArray[i];
+      }
+      return false;
     }
   }
 
@@ -126,7 +130,11 @@ class MyGame extends Phaser.Scene{
     tileSelect.x = map.tileToWorldX(pointerTileX);
     tileSelect.y = map.tileToWorldY(pointerTileY);
 
+    // code  to rotate to squirrels' targets
     Phaser.Actions.Call(squirrelArray, function(e) {
+      let theTarget = getTarget(e.x, e.y, 100);
+      e.setTarget(theTarget);
+
       if (!e.target) {
 			  return
 		  }
@@ -143,8 +151,8 @@ class MyGame extends Phaser.Scene{
 
     // fires nut at regular intervals
     if (2000 * fireNutCount < time && squirrelArray.length) {
-      squirrelArray[0].setTarget(badGuyArray[0]);
-      console.log(squirrelArray[0].target.name);
+      // squirrelArray[0].setTarget(badGuyArray[0]);
+      // console.log(squirrelArray[0].target.name);
       //getTarget(squirrelArray, badGuyArray[badGuyCount]);
     }
 
