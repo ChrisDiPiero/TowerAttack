@@ -4,6 +4,14 @@ export default class Squirrel extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'squirrel');
   }
+
+  fireNut() {
+    console.log('fire!');
+  }
+
+  setTarget(target) {
+		this.target = target
+	}
 }
 
 Phaser.GameObjects.GameObjectFactory.register('squirrel', function (x, y, group) {

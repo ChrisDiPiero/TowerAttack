@@ -16,9 +16,12 @@ let badGuyArray = [];
 let squirrelGroup;
 let squirrelArray = [];
 
-let count = 1;
+// timer counts used in update - declared here to prevent reset
+let badGuyCount = 1;
+let fireNutCount = 1;
 
-const addBadGuyTimer = Phaser.Time.TimerEvent; //timer to create bad guy in group
+// declared functions to expand scope
+let getTarget;
 
 class MyGame extends Phaser.Scene{
   constructor ()
@@ -79,14 +82,15 @@ class MyGame extends Phaser.Scene{
       this.add.squirrel(x, y, group)
     }
 
-    squirrelGroup = this.add.group();
+    squirrelGroup = this.physics.add.group();
 
     addBadGuy = (path, x, y, name, group) => {
       this.add.badGuy(path, x, y, name, group);
     }
 
-    badGuyGroup = this.add.group();
+    badGuyGroup = this.physics.add.group();
 
+    //test to see if a squirrel is already in place
     const isSquirrelHere = (x, y) => {
       squirrelArray = squirrelGroup.children.entries;
       if(squirrelArray.length) {
@@ -95,7 +99,7 @@ class MyGame extends Phaser.Scene{
     }
 
 
-    // test to see if squirrel allowed on tile
+    // test to see if squirrel allowed on tile (isSquirrelHere and road tile)
     this.input.on('pointerdown', function (pointer) {
       let clickedTileIndex = map.getTileAtWorldXY(pointer.worldX, pointer.worldY).index;
       if (clickedTileIndex > 6 && !isSquirrelHere(tileSelect.x + 30, tileSelect.y + 30)) {
@@ -104,6 +108,11 @@ class MyGame extends Phaser.Scene{
         console.log("no squirrel for you!")
       }
     });
+
+    // set target for each squirrel
+    getTarget = function(array, enemy) {
+      array.Map(e => e.setTarget(enemy))
+    }
   }
 
   update (time, delta) {
@@ -117,25 +126,44 @@ class MyGame extends Phaser.Scene{
     tileSelect.x = map.tileToWorldX(pointerTileX);
     tileSelect.y = map.tileToWorldY(pointerTileY);
 
-    if (2000 * count < time && squirrelArray.length) {
-      Phaser.Actions.Call(closest, badGuyArray);
-  
+    Phaser.Actions.Call(squirrelArray, function(e) {
+      if (!e.target) {
+			  return
+		  }
+
+      const tx = e.target.x;
+      const ty = e.target.y;
+
+      const x = e.x;
+      const y = e.y;
+
+      const rotation = Phaser.Math.Angle.Between(x, y, tx, ty);
+      e.setRotation(rotation);
+    }, this);
+
+    // fires nut at regular intervals
+    if (2000 * fireNutCount < time && squirrelArray.length) {
+      squirrelArray[0].setTarget(badGuyArray[0]);
+      console.log(squirrelArray[0].target.name);
+      //getTarget(squirrelArray, badGuyArray[badGuyCount]);
     }
 
-    if (2000 * count < time) {
-      addBadGuy(path, 210, -30, count, badGuyGroup);
+    if (2000 * badGuyCount < time) {
+      addBadGuy(path, 210, -30, badGuyCount, badGuyGroup);
       badGuyArray = badGuyGroup.children.entries;
-      console.log(badGuyArray);
-      count++;
+      badGuyCount++;
     }
   }
 }
 
 const config = {
   type: Phaser.AUTO,
-  parent: 'phaser-example',
+  parent: 'content',
   width: 900,
   height: 600,
+  physics: {
+    default: 'arcade'
+  },
   scene: MyGame
 };
 
