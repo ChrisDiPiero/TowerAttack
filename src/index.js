@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import Squirrel from './Squirrels'
-import BadGuy from './BadGuy'
+import Squirrel from './Squirrels';
+import BadGuy from './BadGuy';
+import Nut from './Nut'
 
 let map; //declared here to grant access to update method
 let tileSelect; //declared here to grant access to update method
@@ -37,6 +38,7 @@ class MyGame extends Phaser.Scene{
     this.load.image('tiles', 'src/assets/tiles.png');
     this.load.image('badGuy', 'src/assets/badguy.svg');
     this.load.image('squirrel', 'src/assets/goodguys.svg');
+    this.load.image('nut', 'src/assets/nuts.svg');
   }
     
   create () {
