@@ -8,13 +8,16 @@ let tileSelect; //declared here to grant access to update method
 let graphics; // used in create to view path - remove when done
 let path; // used in create to make path
 
-//vars to create squirrel and badGuy instances and groups
-let addSquirrel;
+//vars to create squirrel, badGuy, and nut instances, groups, and arrays
 let addBadGuy;
 let badGuyGroup;
 let badGuyArray = [];
+let addSquirrel;
 let squirrelGroup;
 let squirrelArray = [];
+let addNut;
+let nutGroup;
+let nutGroupArray;
 
 // timer counts used in update - declared here to prevent reset
 let badGuyCount = 1;
@@ -90,6 +93,12 @@ class MyGame extends Phaser.Scene{
 
     badGuyGroup = this.physics.add.group();
 
+    addNut = (x, y, target, group) => {
+      this.add.nut(x, y, target, group);
+    }
+
+    nutGroup = this.physics.add.group();
+
     //test to see if a squirrel is already in place
     const isSquirrelHere = (x, y) => {
       squirrelArray = squirrelGroup.children.entries;
@@ -151,9 +160,9 @@ class MyGame extends Phaser.Scene{
 
     // fires nut at regular intervals
     if (2000 * fireNutCount < time && squirrelArray.length) {
-      // squirrelArray[0].setTarget(badGuyArray[0]);
-      // console.log(squirrelArray[0].target.name);
-      //getTarget(squirrelArray, badGuyArray[badGuyCount]);
+      Phaser.Actions.Call(squirrelArray, function(e) {
+        addNut(e.x, e.y, e.target, nutGroup);
+      })
     }
 
     if (2000 * badGuyCount < time) {

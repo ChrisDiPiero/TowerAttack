@@ -1,17 +1,17 @@
 import Phaser from 'phaser'
 
-export default class Nuts extends Phaser.GameObjects.Sprite {
+export default class Nuts extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'nut');
+    this.active = true;
   }
 
-  nutType() {
-
-  }
 }
 
-Phaser.GameObjects.GameObjectFactory.register('nut', function (x, y) {
-  const nut = new Squirrel(this.scene, x, y);
+Phaser.GameObjects.GameObjectFactory.register('nut', function (x, y, target, group) {
+  const nut = new Nut(this.scene, x, y, target);
+
+  group.add(nut);
 
   this.displayList.add(nut);
   this.updateList.add(nut);
