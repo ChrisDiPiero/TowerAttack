@@ -6,7 +6,7 @@ export default class Squirrel extends Phaser.Physics.Arcade.Sprite {
   }
 
   fireNut() {
-    console.log('fire!');
+    let shootAt = this.target;
   }
 
   setTarget(target) {

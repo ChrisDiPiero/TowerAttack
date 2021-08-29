@@ -132,7 +132,7 @@ class MyGame extends Phaser.Scene{
 
     // code  to rotate to squirrels' targets
     Phaser.Actions.Call(squirrelArray, function(e) {
-      let theTarget = getTarget(e.x, e.y, 100);
+      let theTarget = getTarget(e.x, e.y, 200);
       e.setTarget(theTarget);
 
       if (!e.target) {

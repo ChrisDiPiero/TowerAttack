@@ -3,6 +3,13 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="36px" height="36px" viewBox="0 0 36 36" enable-background="new 0 0 36 36" xml:space="preserve">
-<circle fill="#FFFFFF" stroke="#000000" stroke-miterlimit="10" cx="18" cy="18" r="17.1"/>
-<text transform="matrix(1 0 0 1 8.4048 12.8691)"><tspan x="0" y="0" font-family="'MyriadPro-Regular'" font-size="12">Bad</tspan><tspan x="0" y="14.4" font-family="'MyriadPro-Regular'" font-size="12">Guy</tspan></text>
+<g>
+	<path fill="#8CC63F" d="M35.477,18.446c0.784,4.963-0.536,6.052-3.699,10.102c-3.123,3.269-8.089,9.497-13.668,6.729
+		c-5.58-2.745-10.545-1.136-13.668-3.992c-3.163-2.216-4.483-8.897-3.7-13.413c0.784-2.911,3.352-3.174,6.474-7.206
+		c3.163-3.287,6.881-10.342,10.894-9.625c4.012,0.741,7.731-3.27,10.894-0.292C32.125,2.844,34.692,11.928,35.477,18.446z"/>
+	<path fill="none" stroke="#39B54A" stroke-miterlimit="10" d="M35.477,18.446c0.784,4.963-0.536,6.052-3.699,10.102
+		c-3.123,3.269-8.089,9.497-13.668,6.729c-5.58-2.745-10.545-1.136-13.668-3.992c-3.163-2.216-4.483-8.897-3.7-13.413
+		c0.784-2.911,3.352-3.174,6.474-7.206c3.163-3.287,6.881-10.342,10.894-9.625c4.012,0.741,7.731-3.27,10.894-0.292
+		C32.125,2.844,34.692,11.928,35.477,18.446z"/>
+</g>
 </svg>
