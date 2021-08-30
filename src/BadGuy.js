@@ -3,9 +3,14 @@ import Phaser from 'phaser';
 export default class BadGuy extends Phaser.GameObjects.PathFollower {
   constructor(scene, path, x, y, name) {
     super(scene, path, x, y, 'badGuy');
-    this.alive = true;
+    this.setActive(true);
+    this.setVisible(true);
     this.hp = 100;
     this.name = name;
+  }
+
+  takeDamage(damage) {
+    this.hp -= damage
   }
 }
 

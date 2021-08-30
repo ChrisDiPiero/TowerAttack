@@ -3,10 +3,10 @@ import Squirrel from './Squirrels';
 import BadGuy from './BadGuy';
 import Nut from './Nut'
 
-let map; //declared here to grant access to update method
-let tileSelect; //declared here to grant access to update method
+// vars declared in global to grant access to both update and create methods
+let map;
+let tileSelect;
 
-let graphics; // used in create to view path - remove when done
 let path; // used in create to make path
 
 //vars to create squirrel, badGuy, and nut instances, groups, and arrays
@@ -18,7 +18,15 @@ let squirrelGroup;
 let squirrelArray = [];
 let addNut;
 let nutGroup;
-let nutGroupArray;
+let nutGroupArray = [];
+
+// vars for nut logic
+let updateNuts;
+let homeInBadGuy;
+let causeDamage;
+
+// general var to remove items (destroyed or off-screen)
+let removeIfGone
 
 // timer counts used in update - declared here to prevent reset
 let badGuyCount = 1;
@@ -72,10 +80,6 @@ class MyGame extends Phaser.Scene{
     path.lineTo(450, 150);
     path.lineTo(750, 150);
     path.lineTo(750, 630);
-    
-    // visualize the path
-    graphics.lineStyle(3, 0xffffff, 1);
-    path.draw(graphics);
 
     //add code to highlight selected tile for tower placement
     tileSelect = this.add.graphics();
@@ -123,10 +127,34 @@ class MyGame extends Phaser.Scene{
     // set target for each squirrel
     getTarget = function (x, y, distance) {
       for(let i = 0; i < badGuyArray.length; i++) {       
-          if(badGuyArray[i].alive && Phaser.Math.Distance.Between(x, y, badGuyArray[i].x, badGuyArray[i].y) <= distance)
-              return badGuyArray[i];
+        if(badGuyArray[i].active && Phaser.Math.Distance.Between(x, y, badGuyArray[i].x, badGuyArray[i].y) <= distance)
+          return badGuyArray[i];
       }
       return false;
+    }
+
+    //update nut array
+    updateNuts = () => nutGroupArray = nutGroup.children.entries;
+
+    //nuts track targets
+    homeInBadGuy = (nut, badGuy, speed) => this.physics.moveToObject(nut, badGuy, speed); 
+
+    // function to remove
+    removeIfGone = function(e) {
+      e.setActive(false);
+      e.setVisible(false);
+    }
+
+    //function to make damage
+    causeDamage = function(badGuy, nut) {
+      if(badGuy.active && nut.active) {
+        badGuy.takeDamage(nut.damage);
+        removeIfGone(nut);
+      }
+
+      if(badGuy/hp <= 0){
+        removeIfGone(badGuy);
+      }
     }
   }
 
@@ -164,7 +192,16 @@ class MyGame extends Phaser.Scene{
     if (2000 * fireNutCount < time && squirrelArray.length) {
       Phaser.Actions.Call(squirrelArray, function(e) {
         addNut(e.x, e.y, e.target, nutGroup);
-      })
+        updateNuts();
+        fireNutCount++;
+      });
+    }
+
+    if (nutGroupArray) {
+      Phaser.Actions.Call(nutGroupArray, function(e) {
+        homeInBadGuy(e, e.target, 360);
+        updateNuts();
+      });
     }
 
     if (2000 * badGuyCount < time) {
@@ -172,6 +209,9 @@ class MyGame extends Phaser.Scene{
       badGuyArray = badGuyGroup.children.entries;
       badGuyCount++;
     }
+
+    //add nut/badGuy collision
+    this.physics.add.overlap(badGuyArray, nutGroupArray, causeDamage);
   }
 }
 
