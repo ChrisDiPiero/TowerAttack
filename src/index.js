@@ -143,6 +143,7 @@ class MyGame extends Phaser.Scene{
     removeIfGone = function(e) {
       e.setActive(false);
       e.setVisible(false);
+      e.destroy();
     }
 
     //function to make damage
@@ -150,10 +151,6 @@ class MyGame extends Phaser.Scene{
       if(badGuy.active && nut.active) {
         badGuy.takeDamage(nut.damage);
         removeIfGone(nut);
-      }
-
-      if(badGuy/hp <= 0){
-        removeIfGone(badGuy);
       }
     }
   }
@@ -173,10 +170,6 @@ class MyGame extends Phaser.Scene{
     Phaser.Actions.Call(squirrelArray, function(e) {
       let theTarget = getTarget(e.x, e.y, 200);
       e.setTarget(theTarget);
-
-      if (!e.target) {
-			  return
-		  }
 
       const tx = e.target.x;
       const ty = e.target.y;
@@ -212,6 +205,13 @@ class MyGame extends Phaser.Scene{
 
     //add nut/badGuy collision
     this.physics.add.overlap(badGuyArray, nutGroupArray, causeDamage);
+
+    //remove badGuy if dead or off screen
+    Phaser.Actions.Call(badGuyArray, function(e) {
+      if(e.hp <= 0 || e.y > 630){
+        removeIfGone(e);
+      }
+    });
   }
 }
 
