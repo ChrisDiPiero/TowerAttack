@@ -20,7 +20,7 @@ Phaser.GameObjects.GameObjectFactory.register('badGuy', function (path, x, y, na
   group.add(badGuy);
 
   badGuy.startFollow({
-  duration: 10000,
+  duration: 15000,
   rotateToPath: true,
   verticalAdjust: true
   });

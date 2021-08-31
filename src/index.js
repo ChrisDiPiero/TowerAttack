@@ -192,7 +192,13 @@ class MyGame extends Phaser.Scene{
 
     if (nutGroupArray) {
       Phaser.Actions.Call(nutGroupArray, function(e) {
-        homeInBadGuy(e, e.target, 360);
+        if (e.target.active) {
+          homeInBadGuy(e, e.target, 720);
+        } 
+        if (e && !e.target.active)
+        {
+          removeIfGone(e)
+        }
         updateNuts();
       });
     }
