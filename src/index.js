@@ -182,7 +182,7 @@ class MyGame extends Phaser.Scene{
     }, this);
 
     // fires nut at regular intervals
-    if (2000 * fireNutCount < time && squirrelArray.length) {
+    if (1000 * fireNutCount < time && squirrelArray.length) {
       Phaser.Actions.Call(squirrelArray, function(e) {
         addNut(e.x, e.y, e.target, nutGroup);
         updateNuts();
